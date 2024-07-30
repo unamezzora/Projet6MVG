@@ -5,9 +5,7 @@ const path = require('path');
 const bookRoutes = require('./routes/book_routes');
 const userRoutes = require('./routes/user_routes');
 
-mongoose.connect('mongodb+srv://tatiana:P94k2Ryg3JyOU2hP@mvgcluster.lg9qtu5.mongodb.net/?retryWrites=true&w=majority&appName=MVGcluster',
-    { useNewUrlParser: true,
-      useUnifiedTopology: true })
+mongoose.connect('mongodb+srv://tatiana:P94k2Ryg3JyOU2hP@mvgcluster.lg9qtu5.mongodb.net/?retryWrites=true&w=majority&appName=MVGcluster')
     .then(() => console.log('Connexion à MongoDB réussie !'))
     .catch(() => console.log('Connexion à MongoDB échouée !'));
 
