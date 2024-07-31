@@ -1,6 +1,5 @@
 const Book = require('../models/book');
 const fs = require('fs');
-const jwt = require('jsonwebtoken');
 
 exports.getAllBooks = (req, res, next) => {
     Book.find()
@@ -93,6 +92,14 @@ exports.modifyBook = (req, res, next) => {
             if (book.userId != req.auth.userId) {
                 res.status(401).json({ message: 'Non-autorisé' });
             } else {
+                if (book.imageUrl) {
+                    const oldImageName = book.imageUrl.split('/images/')[1];
+                    fs.unlink(`images/${oldImageName}`, (err) => {
+                        if (err) {
+                            console.error('Ancienne image non suprimée', err);
+                        }
+                    })
+                }
                 Book.updateOne({ _id: req.params.id}, { ...bookObject, _id: req.params.id})
                 .then(() => res.status(200).json({message: 'Livre modifié!'}))
                 .catch(error => res.status(401).json({ error }));
