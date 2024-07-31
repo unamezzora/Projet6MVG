@@ -43,39 +43,28 @@ exports.creatRatingBook = (req, res, next) => {
         return res.status(400).json({ error: 'La note doit etre entre 1 et 5' });
     }
 
-    console.log('Received userId:', ratingBook.userId);
-    console.log('Received grade:', ratingBook.grade);
-
-
     Book.findOne({_id: req.params.id})
         .then((book) => {
             if (!book) {
-                console.log('Book not found');
                 return res.status(404).json({ error: "Livre n'existe pas"});
             } 
             const alreadyRated = book.ratings.some(r => r.userId === ratingBook.userId);
 
             if (alreadyRated) {
-                console.log('User already rated this book');
                 res.status(400).json({ message: 'Vous avez déjà noté ce livre' })
             } else {
                 book.ratings.push(ratingBook);
                 const bookRatings = book.ratings.reduce((sum, r) => sum + r.grade, 0);
                 book.averageRating = bookRatings / (book.ratings.length || 1);
 
-                console.log('Saving book with new rating:', book);
-
                 book.save()
                     .then((book) => res.status(200).json(book))
                     .catch(error => {
-                        console.error('Error saving the book:', error);
                         res.status(400).json({ error });
                     });
-                        
             }
         })
         .catch(error => {
-            console.error('Error finding the book:', error);
             { res.status(500).json({ error })}}
         )};
 
