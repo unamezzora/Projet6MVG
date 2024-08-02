@@ -54,7 +54,7 @@ exports.creatRatingBook = (req, res, next) => {
             } else {
                 book.ratings.push(ratingBook);
                 const bookRatings = book.ratings.reduce((sum, r) => sum + r.grade, 0);
-                book.averageRating = bookRatings / (book.ratings.length || 1);
+                book.averageRating = (bookRatings / (book.ratings.length || 1)).toFixed(2);
 
                 book.save()
                     .then((book) => res.status(200).json(book))
