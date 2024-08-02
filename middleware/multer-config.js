@@ -16,7 +16,7 @@ const MIME_TYPES = {
 
     const saveImage = async (req, res, next) => {
         if (!req.file) {
-            return next();
+            return next(); //continuer si file n'existe pas
         }
         const file = req.file;
         const name = req.file.originalname.split(' ').join('_').split('.')[0];
@@ -26,7 +26,7 @@ const MIME_TYPES = {
             return res.status(400).json({ message: "Type de fichier n'est pas reconnu !" })
         }
 
-        const filename = name + Date.now() + 'webp';
+        const filename = name + Date.now() + '.webp';
         const outputPath = path.join(__dirname, '../images', filename);
 
         try {
@@ -39,7 +39,7 @@ const MIME_TYPES = {
 
             next();
         } catch (err) {
-            res.status(500).json({ error })
+            res.status(500).json({ error: error.message })
         }
 
     }
